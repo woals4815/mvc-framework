@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import core.db.DataBase;
 import next.model.User;
 
-@WebServlet(value = { "/users/create", "/users/form" })
 public class CreateUserController implements Controller {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
@@ -38,6 +37,8 @@ public class CreateUserController implements Controller {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         if (req.getMethod().equals("GET")) {
+            RequestDispatcher rd = req.getRequestDispatcher("/user/form.jsp");
+            rd.forward(req, resp);
             return "/user/form.jsp";
         }
         return "redirect:/";

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import core.db.DataBase;
 
-@WebServlet("")
 public class HomeController implements Controller {
     private static final long serialVersionUID = 1L;
 

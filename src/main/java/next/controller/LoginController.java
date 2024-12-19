@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import core.db.DataBase;
 import next.model.User;
 
-@WebServlet(value = { "/users/login", "/users/loginForm" })
 public class LoginController implements Controller {
     private static final long serialVersionUID = 1L;
 
@@ -50,6 +49,8 @@ public class LoginController implements Controller {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         if (req.getMethod().equals("GET")) {
+            RequestDispatcher rd = req.getRequestDispatcher("/user/login.jsp");
+            rd.forward(req, resp);
             return "/user/login.jsp";
         }
         String userId = req.getParameter("userId");

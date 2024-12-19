@@ -21,9 +21,6 @@ public class CreateUserController implements Controller {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        if (req.getMethod().equals("GET")) {
-            return "/user/form.jsp";
-        }
         return "redirect:/";
     }
 }

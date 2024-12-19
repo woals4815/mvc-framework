@@ -29,14 +29,10 @@ public class ListUserController implements Controller {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         if (!UserSessionUtils.isLogined(req.getSession())) {
-            resp.sendRedirect("/users/loginForm");
             return "redirect:/users/loginForm";
         }
 
         req.setAttribute("users", DataBase.findAll());
-
-        RequestDispatcher rd = req.getRequestDispatcher("/user/list.jsp");
-        rd.forward(req, resp);
         return "/user/list.jsp";
     }
 }

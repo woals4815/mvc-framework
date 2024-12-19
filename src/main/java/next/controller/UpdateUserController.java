@@ -53,8 +53,6 @@ public class UpdateUserController implements Controller {
                 throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
             }
             req.setAttribute("user", user);
-            RequestDispatcher rd = req.getRequestDispatcher("/user/updateForm.jsp");
-            rd.forward(req, resp);
             return "/user/updateForm.jsp";
         }
 
@@ -67,7 +65,6 @@ public class UpdateUserController implements Controller {
                 req.getParameter("email"));
         log.debug("Update User : {}", updateUser);
         user.update(updateUser);
-        resp.sendRedirect("/");
         return "redirect:/";
     }
 }

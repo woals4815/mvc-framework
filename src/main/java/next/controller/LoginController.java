@@ -49,8 +49,6 @@ public class LoginController implements Controller {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         if (req.getMethod().equals("GET")) {
-            RequestDispatcher rd = req.getRequestDispatcher("/user/login.jsp");
-            rd.forward(req, resp);
             return "/user/login.jsp";
         }
         String userId = req.getParameter("userId");

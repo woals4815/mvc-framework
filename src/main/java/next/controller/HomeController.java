@@ -3,10 +3,13 @@ package next.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import core.annotation.Controller;
+import jdk.nashorn.internal.objects.annotations.Constructor;
 import next.dao.QuestionDao;
 import core.mvc.AbstractController;
 import core.mvc.ModelAndView;
 
+@Controller
 public class HomeController extends AbstractController {
     private QuestionDao questionDao = QuestionDao.getInstance();
 

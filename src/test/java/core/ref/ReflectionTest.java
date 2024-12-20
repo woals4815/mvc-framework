@@ -1,11 +1,16 @@
 package core.ref;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import next.model.Question;
 import next.model.User;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 public class ReflectionTest {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionTest.class);
@@ -17,14 +22,24 @@ public class ReflectionTest {
     }
     
     @Test
-    public void newInstanceWithConstructorArgs() {
+    public void newInstanceWithConstructorArgs() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Class<User> clazz = User.class;
-        logger.debug(clazz.getName());
+        Constructor<?> declaredConstructor = clazz.getDeclaredConstructors()[0];
+        declaredConstructor.newInstance("userId", "password", "name", "email");
+
     }
     
     @Test
-    public void privateFieldAccess() {
+    public void privateFieldAccess() throws NoSuchFieldException, IllegalAccessException {
         Class<Student> clazz = Student.class;
-        logger.debug(clazz.getName());
+        Field name = clazz.getDeclaredField("name");
+        Field age = clazz.getDeclaredField("age");
+        name.setAccessible(true);
+        age.setAccessible(true);
+        Student student = new Student();
+        name.set(student, "name");
+        age.setInt(student, 20);
+
+        Assert.assertEquals("name", student.getName());
     }
 }

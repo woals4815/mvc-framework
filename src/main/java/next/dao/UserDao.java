@@ -64,7 +64,7 @@ public class UserDao {
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, userId);
             }
-        }, new RowMapper() {
+        }, new RowMapper<User>() {
             @Override
             User mapRow(ResultSet rs) throws SQLException {
                 User user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),

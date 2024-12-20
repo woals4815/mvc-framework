@@ -6,14 +6,15 @@ import javax.servlet.http.HttpSession;
 
 import core.mvc.Controller;
 import core.mvc.JspView;
+import core.mvc.ModelAndView;
 import core.mvc.View;
 import next.controller.UserSessionUtils;
 
 public class LogoutController implements Controller {
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         HttpSession session = req.getSession();
         session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
-        return new JspView( "redirect:/" );
+        return new ModelAndView(new JspView("redirect:/"));
     }
 }

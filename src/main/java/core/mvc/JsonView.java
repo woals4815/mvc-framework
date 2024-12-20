@@ -10,15 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonView implements View {
-    @Override
-    public void render(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        Map<String, Object> model = this.createModel(req);
-        ObjectMapper mapper = new ObjectMapper();
-        resp.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = resp.getWriter();
-        out.print(mapper.writeValueAsString(model));
-    }
-
     private Map<String, Object> createModel(HttpServletRequest req) {
         Map<String, Object> model = new HashMap<String, Object>();
         Enumeration<String> names = req.getAttributeNames();
@@ -27,5 +18,13 @@ public class JsonView implements View {
             model.put(name, req.getAttribute(name));
         }
         return model;
+    }
+
+    @Override
+    public void render(Map<String, ?> model, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        resp.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = resp.getWriter();
+        out.print(mapper.writeValueAsString(model));
     }
 }

@@ -32,23 +32,14 @@ public class DispatcherServlet extends HttpServlet {
         logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
 
         Controller controller = rm.findController(requestUri);
+
         try {
-            View view = controller.execute(req, resp);
-            view.render(req, resp);
+            ModelAndView modelAndView = controller.execute(req, resp);
+            View view = modelAndView.getView();
+            view.render(modelAndView.getModel(), req, resp);
         } catch (Throwable e) {
             logger.error("Exception : {}", e);
             throw new ServletException(e.getMessage());
         }
-    }
-
-    private void move(String viewName, HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        if (viewName.startsWith(DEFAULT_REDIRECT_PREFIX)) {
-            resp.sendRedirect(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));
-            return;
-        }
-
-        RequestDispatcher rd = req.getRequestDispatcher(viewName);
-        rd.forward(req, resp);
     }
 }

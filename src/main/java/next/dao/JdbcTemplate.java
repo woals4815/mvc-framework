@@ -29,6 +29,28 @@ public  class JdbcTemplate {
             }
         }
     }
+
+    public void update(String sql, Object... params) throws SQLException {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        try {
+            con = ConnectionManager.getConnection();
+            pstmt = con.prepareStatement(sql);
+
+            for (int i = 0; i < params.length; i++) {
+                pstmt.setObject(i + 1, params[i]);
+            }
+
+            pstmt.executeUpdate();
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
     public <T> List<T> query(String sql, PreparedStatementSetter pstmtSetter, RowMapper<T> rm) throws SQLException {
         List result = new ArrayList();
         Connection con = null;

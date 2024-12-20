@@ -29,7 +29,7 @@ public  class JdbcTemplate {
             }
         }
     }
-    public List query(String sql, PreparedStatementSetter pstmtSetter, RowMapper rm) throws SQLException {
+    public <T> List<T> query(String sql, PreparedStatementSetter pstmtSetter, RowMapper rm) throws SQLException {
         List result = new ArrayList();
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -60,7 +60,7 @@ public  class JdbcTemplate {
         }
     }
 
-    public Object queryForObject(String sql, PreparedStatementSetter pstmtSetter, RowMapper rm) throws SQLException {
+    public <T> T queryForObject(String sql, PreparedStatementSetter pstmtSetter, RowMapper rm) throws SQLException {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -71,7 +71,7 @@ public  class JdbcTemplate {
 
             rs = pstmt.executeQuery();
 
-            Object result = null;
+            T result = null;
             if (rs.next()) {
                 result = rm.mapRow(rs);
             }

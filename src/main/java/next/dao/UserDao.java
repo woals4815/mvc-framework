@@ -39,32 +39,34 @@ public class UserDao {
 
     public List<User> findAll() throws SQLException {
         JdbcTemplate selectJdbc = new JdbcTemplate();
-        return selectJdbc.query("SELECT userId, password, name, email FROM USERS", new PreparedStatementSetter() {
+        List<User> result = selectJdbc.query("SELECT userId, password, name, email FROM USERS", new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
             }
         }, new RowMapper() {
             @Override
-            Object mapRow(ResultSet rs) throws SQLException {
+            User mapRow(ResultSet rs) throws SQLException {
                 User user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
                         rs.getString("email"));
 
                 return user;
             }
         });
+
+        return result;
     }
 
     public User findByUserId(String userId) throws SQLException {
         JdbcTemplate selectJdbc = new JdbcTemplate();
 
-        return (User) selectJdbc.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userId=?", new PreparedStatementSetter() {
+        return selectJdbc.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userId=?", new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, userId);
             }
         }, new RowMapper() {
             @Override
-            Object mapRow(ResultSet rs) throws SQLException {
+            User mapRow(ResultSet rs) throws SQLException {
                 User user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
                         rs.getString("email"));
 

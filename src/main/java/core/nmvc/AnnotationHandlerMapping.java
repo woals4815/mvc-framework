@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import core.annotation.Controller;
+import core.di.factory.BeanFactory;
 import core.di.factory.BeanScanner;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
@@ -30,7 +32,9 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
     public void initialize() {
         BeanScanner beanScanner = new BeanScanner(basePackage);
-        Map<Class<?>, Object> controllers = beanScanner.getControllers();
+        BeanFactory beanFactory = new BeanFactory(beanScanner.scan());
+        beanFactory.initialize();
+        Map<Class<?>, Object> controllers = beanFactory.getControllers();
         Set<Method> methods = getRequestMappingMethods(controllers.keySet());
         for (Method method : methods) {
             RequestMapping rm = method.getAnnotation(RequestMapping.class);

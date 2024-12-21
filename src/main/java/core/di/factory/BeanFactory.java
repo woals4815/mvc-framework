@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import core.annotation.Controller;
 import core.annotation.Inject;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
@@ -30,15 +31,28 @@ public class BeanFactory {
         return (T) beans.get(requiredType);
     }
 
-    public void initialize() throws Exception {
-        for(Class<?> clazz : preInstanticateBeans) {
-            Class<?> concreteClazz = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
-            if (beans.get(concreteClazz) != null) {
-                continue;
+    public void initialize() {
+        try {
+            for(Class<?> clazz : preInstanticateBeans) {
+                Class<?> concreteClazz = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
+                if (beans.get(concreteClazz) != null) {
+                    continue;
+                }
+                Object instance = instantiateClass(concreteClazz);
+                beans.put(concreteClazz, instance);
             }
-            Object instance = instantiateClass(concreteClazz);
-            beans.put(concreteClazz, instance);
+        } catch (Exception e) {
+            throw new RuntimeException("Bean initialize failed");
         }
+    }
+    public Map<Class<?>, Object> getControllers() {
+        Map<Class<?>, Object> controllers = Maps.newHashMap();
+        for(Class<?> clazz : preInstanticateBeans) {
+            if(clazz.isAnnotationPresent(Controller.class)) {
+                controllers.put(clazz, getBean(clazz));
+            }
+        }
+        return controllers;
     }
     private Object instantiateClass(Class<?> clazz) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Set<Constructor> constructors = ReflectionUtils.getAllConstructors(clazz, ReflectionUtils.withAnnotation(Inject.class));

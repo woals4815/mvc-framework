@@ -21,8 +21,11 @@ public class BeanFactory {
 
     private Map<Class<?>, Object> beans = Maps.newHashMap();
 
+    private List<Injector> injectors = Lists.newArrayList();
+
     public BeanFactory(Set<Class<?>> preInstanticateBeans) {
         this.preInstanticateBeans = preInstanticateBeans;
+        injectors.add(new ConstructorInjector(this));
     }
 
     @SuppressWarnings("unchecked")
@@ -34,47 +37,24 @@ public class BeanFactory {
         for (Class<?> clazz : preInstanticateBeans) {
             if (beans.get(clazz) == null) {
                 logger.debug("instantiated Class : {}", clazz);
-                instantiateClass(clazz);
+                inject(clazz);
             }
         }
     }
+    public Set<Class<?>> getPreInstanticateBeans() {
+        return preInstanticateBeans;
+    }
 
-    private Object instantiateClass(Class<?> clazz) {
-        Object bean = beans.get(clazz);
-        if (bean != null) {
-            return bean;
+    private void inject(Class<?> clazz) {
+        for (Injector injector : injectors) {
+            injector.inject(clazz);
         }
+    }
 
-        Constructor<?> injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
-        if (injectedConstructor == null) {
-            bean = BeanUtils.instantiate(clazz);
-            beans.put(clazz, bean);
-            return bean;
-        }
-
-        logger.debug("Constructor : {}", injectedConstructor);
-        bean = instantiateConstructor(injectedConstructor);
+    public void addBean(Class<?> clazz, Object bean) {
         beans.put(clazz, bean);
-        return bean;
     }
 
-    private Object instantiateConstructor(Constructor<?> constructor) {
-        Class<?>[] pTypes = constructor.getParameterTypes();
-        List<Object> args = Lists.newArrayList();
-        for (Class<?> clazz : pTypes) {
-            Class<?> concreteClazz = BeanFactoryUtils.findConcreteClass(clazz, preInstanticateBeans);
-            if (!preInstanticateBeans.contains(concreteClazz)) {
-                throw new IllegalStateException(clazz + "는 Bean이 아니다.");
-            }
-
-            Object bean = beans.get(concreteClazz);
-            if (bean == null) {
-                bean = instantiateClass(concreteClazz);
-            }
-            args.add(bean);
-        }
-        return BeanUtils.instantiateClass(constructor, args.toArray());
-    }
 
     public Map<Class<?>, Object> getControllers() {
         Map<Class<?>, Object> controllers = Maps.newHashMap();

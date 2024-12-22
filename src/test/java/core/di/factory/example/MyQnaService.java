@@ -9,8 +9,15 @@ public class MyQnaService {
     private QuestionRepository questionRepository;
 
     @Inject
-    public MyQnaService(UserRepository userRepository, QuestionRepository questionRepository) {
+    public MyQnaService() {
+    }
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+    @Inject
+    public void setQuestionRepository(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

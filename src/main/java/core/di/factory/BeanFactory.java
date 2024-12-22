@@ -27,6 +27,7 @@ public class BeanFactory {
         this.preInstanticateBeans = preInstanticateBeans;
         injectors.add(new ConstructorInjector(this));
         injectors.add(new FieldInjector(this));
+        injectors.add(new SetterInjector(this));
 
     }
 

@@ -11,11 +11,11 @@ import core.web.view.ModelAndView;
 
 @Controller
 public class QnaController extends AbstractNewController {
+    @Inject
     private MyQnaService qnaService;
 
     @Inject
-    public QnaController(MyQnaService qnaService) {
-        this.qnaService = qnaService;
+    public QnaController() {
     }
 
     public MyQnaService getQnaService() {

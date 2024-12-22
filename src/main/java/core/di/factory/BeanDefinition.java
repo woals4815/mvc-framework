@@ -14,8 +14,8 @@ public class BeanDefinition {
 
     public BeanDefinition(Class<?> clazz) {
         this.beanClazz = clazz;
-        injectedConstructor = getInjectedConstructor();
-        injectedFields = getInjectedFields();
+        injectedConstructor = getInjectedConstructor(clazz);
+        injectedFields = getInjectedFields(clazz, injectedConstructor);
     }
 
     private static Constructor<?> getInjectedConstructor(Class<?> clazz) {

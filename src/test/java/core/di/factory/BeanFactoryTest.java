@@ -23,7 +23,7 @@ public class BeanFactoryTest {
 
     @Before
     public void setup() {
-        BeanScanner scanner = new BeanScanner("core.di.factory.example");
+        ClasspathBeanDefinitionScanner scanner = new ClasspathBeanDefinitionScanner("core.di.factory.example");
         Set<Class<?>> preInstanticateClazz = scanner.scan();
         beanFactory = new BeanFactory(preInstanticateClazz);
         beanFactory.initialize();
